@@ -1,2 +1,2 @@
 # live-template-editor-affiliate
-Addon - Affiliate Program for Live Template Editor
+Affiliate - Affiliate Program for Live Template Editor
