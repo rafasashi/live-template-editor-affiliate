@@ -43,7 +43,7 @@ class LTPLE_Affiliate_Settings {
 		$this->plugin 		 	= new stdClass();
 		$this->plugin->slug  	= 'live-template-editor-affiliate';
 		
-		add_action('ltple_affiliate_settings', array($this, 'settings_fields' ) );
+		add_action('ltple_addon_settings', array($this, 'settings_fields' ) );
 		
 		add_action( 'ltple_admin_menu' , array( $this, 'add_menu_items' ) );	
 	}
@@ -53,26 +53,25 @@ class LTPLE_Affiliate_Settings {
 	 * @return array Fields to be displayed on settings page
 	 */
 	public function settings_fields () {
-		
+
 		$settings = [];
 		
-		/*
-		$settings['test'] = array(
-			'title'					=> __( 'Test', $this->plugin->slug ),
-			'description'			=> '',
-			'fields'				=> array(
-				
+		$settings['affiliate'] = array(
+		
+			'title'					=> __( 'Affiliate', $this->plugin->slug ),
+			'description'			=> __( 'Affiliate settings', $this->plugin->slug ),
+			'fields'				=> array(		
 				array(
-					'id' 			=> 'affiliate_url',
-					'label'			=> __( 'Affiliate Url' , $this->plugin->slug ),
+					'id' 			=> 'affiliate_banners',
+					'name' 			=> 'affiliate_banners',
+					'label'			=> __( 'Affiliate banners' , $this->plugin->slug ),
 					'description'	=> '',
-					'type'			=> 'text',
-					'default'		=> '',
-					'placeholder'	=> __( 'http://', $this->plugin->slug )
-				),				
+					'inputs'		=> 'string',
+					'type'			=> 'key_value',
+					'placeholder'	=> ['key'=>'image title', 'value'=>'url'],
+				),
 			)
 		);
-		*/
 		
 		if( !empty($settings) ){
 		
@@ -99,21 +98,13 @@ class LTPLE_Affiliate_Settings {
 	public function add_menu_items () {
 		
 		//add menu in wordpress dashboard
-		/*
-		add_users_page( 
-			'Test', 
-			'Test', 
-			'edit_pages',
-			'users.php?' . $this->parent->_base .'view=test'
-		);
-		
+
 		add_submenu_page(
 			'live-template-editor-client',
-			__( 'Test', $this->plugin->slug ),
-			__( 'Test', $this->plugin->slug ),
+			__( 'Affiliate Commissions', $this->plugin->slug ),
+			__( 'Affiliate Commissions', $this->plugin->slug ),
 			'edit_pages',
 			'edit.php?post_type=affiliate-commission'
 		);
-		*/
 	}
 }

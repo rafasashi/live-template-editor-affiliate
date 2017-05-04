@@ -61,9 +61,11 @@
 		
 		$instance = LTPLE_Client::instance( __FILE__, $version );
 		
-		if ( is_null( $instance->affiliate ) ) {
-		
-			$instance = LTPLE_Affiliate::instance( $instance, $version );
+		if ( empty( $instance->programs ) ) {
+			
+			$instance->programs = new stdClass();
+			
+			$instance->programs = LTPLE_Affiliate::instance( __FILE__, $instance, $version );
 		}
 
 		return $instance;
