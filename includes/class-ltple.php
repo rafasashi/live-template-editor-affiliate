@@ -20,15 +20,16 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	 * Constructor function
 	 */
 	public function __construct ( $file='', $parent, $version = '1.0.0' ) {
-		
+
 		$this->parent 	= $parent;
-		
+
 		$this->_version = $version;
 		$this->_token	= md5($file);
 		
 		$this->message = '';
 		
 		// Load plugin environment variables
+		
 		$this->file 		= $file;
 		$this->dir 			= dirname( $this->file );
 		$this->views   		= trailingslashit( $this->dir ) . 'views';
@@ -42,22 +43,18 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 		
 		// Load frontend JS & CSS
+		
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
 
 		// Load admin JS & CSS
+		
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );		
 		
 		$this->settings = new LTPLE_Affiliate_Settings( $this->parent );
 		
-		$this->admin = new LTPLE_Affiliate_Admin_API( $this );
-		
-		$this->list = array(
-		
-			'affiliate'	=>'Affiliate',
-			//'partner'	=>'Partner',
-		);
+		$this->admin 	= new LTPLE_Affiliate_Admin_API( $this );
 		
 		$this->parent->register_post_type( 'affiliate-commission', __( 'Affiliate commissions', 'live-template-editor-client' ), __( 'Affiliate commission', 'live-template-editor-client' ), '', array(
 
@@ -92,7 +89,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			'show_in_rest'          => true,
 			'rewrite' 				=> false,
 			'sort' 					=> '',
-		));		
+		));	
 		
 		add_action( 'add_meta_boxes', function(){
 		
@@ -127,6 +124,11 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		add_action( 'user_register', array( $this, 'ref_user_register' ));
 		
+		add_action( 'ltple_list_programs', function(){
+			
+			$this->parent->programs->list['affiliate'] = 'Affiliate';
+		});
+
 		add_action( 'ltple_campaign_triggers', function(){
 			
 			$this->parent->campaign->triggers = array_merge(
@@ -147,7 +149,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			
 			// get user affiliate
 			
-			$this->parent->user->is_affiliate = $this->has_program('affiliate', $this->parent->user->ID, $this->parent->user->programs);
+			$this->parent->user->is_affiliate = $this->parent->programs->has_program('affiliate', $this->parent->user->ID, $this->parent->user->programs);
 			
 			if( $this->parent->user->is_affiliate ){
 
@@ -285,24 +287,51 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	public function init_affiliate(){
 		
 		if( is_admin() ){
-			
-			add_filter('affiliate-commission_custom_fields', array( $this, 'get_affiliate_commission_fields' ));
-		
 
-			// add program field
-			
-			add_action( 'show_user_profile', array( $this, 'get_user_programs' ) );
-			add_action( 'edit_user_profile', array( $this, 'get_user_programs' ) );
-			
-			// add affiliate field
-			
-			add_action( 'show_user_profile', array( $this, 'get_user_referrals' ) );
-			add_action( 'edit_user_profile', array( $this, 'get_user_referrals' ) );		
-			
-			// save user programs
-			
-			add_action( 'personal_options_update', array( $this, 'save_user_programs' ) );
-			add_action( 'edit_user_profile_update', array( $this, 'save_user_programs' ) );			
+			global $pagenow;
+				
+			if( $pagenow == 'users.php' ){		
+		
+				// add tab in user panel
+				
+				add_action( 'ltple_user_tab', array($this, 'get_affiliate_tab' ) );
+				
+				if( $this->parent->users->view == 'affiliates' ){
+				
+					// filter affiliate users
+					
+					add_filter( 'pre_get_users', array( $this, 'filter_affiliates') );
+
+					// custom users columns
+					
+					if( method_exists($this, 'update_' . $this->parent->users->view . '_table') ){
+						
+						add_filter('manage_users_columns', array($this, 'update_' . $this->parent->users->view . '_table'), 100, 1);
+					}
+					
+					if( method_exists($this, 'modify_' . $this->parent->users->view . '_table_row') ){
+						
+						add_filter('manage_users_custom_column', array($this, 'modify_' . $this->parent->users->view . '_table_row'), 100, 3);	
+					}
+				}
+			}
+			else{
+				
+				// get affiliate fields
+				
+				add_filter('affiliate-commission_custom_fields', array( $this, 'get_affiliate_commission_fields' ));
+
+				
+				// add affiliate field
+				
+				add_action( 'show_user_profile', array( $this, 'get_user_referrals' ) );
+				add_action( 'edit_user_profile', array( $this, 'get_user_referrals' ) );		
+				
+				// save user programs
+				
+				add_action( 'personal_options_update', array( $this, 'save_user_affiliate' ) );
+				add_action( 'edit_user_profile_update', array( $this, 'save_user_affiliate' ) );
+			}
 		}
 		else{
 			
@@ -330,14 +359,70 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		}
 	}
 	
-	public function has_program( $program = 'affiliate', $user_id = 0, $programs = NULL ){
+	public function filter_affiliates( $query ) {
+
+		// alter the user query to add my meta_query
 		
-		if( is_null($programs) ){
+		$query->set( 'meta_query', array(
 		
-			$programs = json_decode( get_user_meta( $user_id, $this->parent->_base . 'user-programs',true) );
+			array(
+			
+				'key' 		=> $this->parent->_base . 'user-programs',
+				'value' 	=> 'affiliate',
+				'compare' 	=> 'LIKE'
+			),
+		));
+	}
+	
+	public function get_affiliate_tab(){
+		
+		echo '<a class="nav-tab ' . ( $this->parent->users->view == 'affiliates' ? 'nav-tab-active' : '' ) . '" href="users.php?ltple_view=affiliates">Affiliates</a>';
+	}
+	
+	public function update_affiliates_table($column) {
+		
+		$column=[];
+		$column["cb"]			= '<input type="checkbox" />';
+		$column["username"]		= 'Username';
+		$column["email"]		= 'Email';
+		$column["clicks"]		= 'Clicks';	
+		$column["referrals"]	= 'Referrals';
+		$column["commission"]	= 'Commission';
+		
+		return $column;
+	}
+	
+	public function modify_affiliates_table_row($val, $column_name, $user_id) {
+		
+		if(!isset($this->list->{$user_id})){
+		
+			if( empty($this->list) ){
+				
+				$this->list	= new stdClass();
+			}			
+		
+			$this->list->{$user_id} 				= new stdClass();
+			$this->list->{$user_id}->clicks 		= $this->get_affiliate_counter($user_id, 'clicks');
+			$this->list->{$user_id}->referrals 		= $this->get_affiliate_counter($user_id, 'referrals');
+			$this->list->{$user_id}->commission 	= $this->get_affiliate_counter($user_id, 'commission');
 		}
 		
-		return ( !empty($programs) && in_array($program, $programs) );
+		$row='';
+		
+		if ($column_name == "clicks") { 
+				
+			$row .= $this->list->{$user_id}->clicks['total'];
+		}
+		elseif ($column_name == "referrals") {
+				
+			$row .= $this->list->{$user_id}->referrals['total'];
+		}
+		elseif ($column_name == "commission") {
+			
+			$row .= '$' . $this->list->{$user_id}->commission['total'];
+		}
+		
+		return $row;
 	}
 	
 	public function get_affiliate_counter($user_id, $type = 'clicks'){
@@ -819,43 +904,6 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			echo'</tbody>';
 		
 		echo'</table>';		
-	}	
-	
-	public function get_user_programs( $user ) {
-		
-		if( current_user_can( 'administrator' ) ){
-			
-			$user_programs = $this->parent->editedUser->programs;
-			
-			if(!is_array($user_programs)){
-				
-				$user_programs = [];
-			}
-			
-			if( user_can( $user->ID, 'administrator' ) ){
-				
-				echo '<div class="postbox" style="min-height:45px;">';
-					
-					echo '<h3 style="float:left;margin:10px;width:300px;display: inline-block;">' . __( 'Stripe Account', 'live-template-editor-client' ) . '</h3>';
-					
-					echo '<iframe src="' . $this->parent->server->url . '/endpoint/?connect=' . $this->parent->ltple_encrypt_uri($user->user_email) . '" style="width:250px;height:50px;overflow:hidden;"></iframe>';				
-						
-				echo'</div>';
-			}
-			
-			echo '<div class="postbox" style="min-height:45px;">';
-				
-				echo '<h3 style="margin:10px;width:300px;display: inline-block;">' . __( 'Programs', 'live-template-editor-client' ) . '</h3>';
-				
-				foreach($this->list as $slug => $name){
-					
-					echo '<input type="checkbox" name="' . $this->parent->_base . 'user-programs[]" id="user-program-'.$slug.'" value="'.$slug.'"'.( in_array( $slug, $user_programs ) ? ' checked="checked"' : '' ).'>';
-					echo '<label for="user-program-'.$slug.'">'.$name.'</label>';
-					echo '<br>';
-				}				
-					
-			echo'</div>';
-		}	
 	}
 	
 	public function get_user_referrals( $user ) {
@@ -989,11 +1037,9 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		}	
 	}
 	
-	public function save_user_programs( $user_id ) {
+	public function save_user_affiliate( $user_id ) {
 		
 		if(isset($_POST[$this->parent->_base . 'user-programs'])){
-			
-			update_user_meta( $user_id, $this->parent->_base . 'user-programs', json_encode($_POST[$this->parent->_base . 'user-programs']));	
 
 			if( in_array( 'affiliate', $_POST[$this->parent->_base . 'user-programs']) ){
 				

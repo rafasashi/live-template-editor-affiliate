@@ -122,5 +122,12 @@ class LTPLE_Affiliate_Settings {
 			'edit_pages',
 			'edit.php?post_type=affiliate-commission'
 		);
+		
+		add_users_page( 
+			'All Affiliates', 
+			'All Affiliates', 
+			'edit_pages',
+			'users.php?' . $this->parent->_base .'view=affiliates'
+		);
 	}
 }
