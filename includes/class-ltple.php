@@ -119,10 +119,12 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		});
 		
 		add_action( 'wp_loaded', array($this,'get_commission_status'));
-		
+
 		add_action( 'ltple_loaded', array( $this, 'init_affiliate' ));
 		
-		add_action( 'user_register', array( $this, 'ref_user_register' ));
+		add_action( 'ltple_ref_user_added', array( $this, 'ref_user_added' ));
+		
+		add_action( 'ltple_ref_users_bulk_added', array( $this, 'ref_users_bulk_added' ));
 		
 		add_action( 'ltple_list_programs', function(){
 			
@@ -695,96 +697,110 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		return $currency . number_format($balance, 2, '.', '');
 	}
 	
-	public function ref_user_register( $user_id ){
+	public function ref_user_added(){
 				
 		if( is_numeric( $this->parent->request->ref_id ) ){
 			
-			// get affiliate data
+			if( !empty($this->parent->users->referent->ID) && !empty($this->parent->users->referral->ID)){
 			
-			$affiliate = get_userdata( $this->parent->request->ref_id );
+				//set referral counter
+				
+				$this->set_affiliate_counter($this->parent->users->referent->ID, 'referrals', $this->parent->users->referral->ID );				
+				
+				// send notification
+				
+				$company	= ucfirst(get_bloginfo('name'));
+				
+				$dashboard_url = $this->parent->urls->editor . '?affiliate';
+				
+				$title 		= 'New referral user registration on ' . $company;
+				
+				$content 	= '';
+				$content 	.= 'Congratulations ' . ucfirst($this->parent->users->referent->user_nicename) . '! A new user registration has been made using your affiliate ID. You can view the full details of your affiliate program in your dashboard:' . PHP_EOL . PHP_EOL;
 
-			if($affiliate){
+				$content 	.= '	' . $dashboard_url . '#overview' . PHP_EOL . PHP_EOL;
+
+				$content 	.= 'We\'ll be here to help you with any step along the way. You can find answers to most questions and get in touch with us at '. $dashboard_url . '#rules' . PHP_EOL . PHP_EOL;
+
+				$content 	.= 'Yours,' . PHP_EOL;
+				$content 	.= 'The ' . $company . ' team' . PHP_EOL . PHP_EOL;
+
+				$content 	.= '==== Registration Summary ====' . PHP_EOL . PHP_EOL;
+
+				$content 	.= 'Referral name: ' . ucfirst($this->parent->users->referral->user_nicename) . PHP_EOL;
+				$content 	.= 'Referral email: ' . $this->parent->users->referral->user_email . PHP_EOL;
 				
-				// get referral info
+				wp_mail($this->parent->users->referent->user_email, $title, $content);
 				
-				$referral = get_userdata($user_id);
+				if( $this->parent->settings->options->emailSupport != $this->parent->users->referent->user_email ){
+					
+					wp_mail($this->parent->settings->options->emailSupport, $title, $content);
+				}
+			}
+		}
+	}
+	
+	
+	public function ref_users_bulk_added(){
+				
+		if( !empty($this->parent->users->referrals) ){
 			
-				if($referral){
-					
-					//set marketing channel
-					
-					$this->parent->update_user_channel($user_id,'Friend Recommendation');
+			if( !empty($this->parent->users->referent->ID) ){
+
+				//set referral counter
 			
-					//assign affiliate to referral
+				foreach($this->parent->users->referrals as $referral){
+
+					$this->set_affiliate_counter($this->parent->users->referent->ID, 'referrals', $referral->ID );
+				}
+				
+				// send notification
+				
+				$company	= ucfirst(get_bloginfo('name'));
+				$count		= count($this->parent->users->referrals);
+				
+				$dashboard_url = $this->parent->urls->editor . '?affiliate';
+				
+				$title 		= 'Referral users imported on ' . $company;
+				
+				$content 	= '';
+				$content 	.= 'Congratulations ' . ucfirst($this->parent->users->referent->user_nicename) . '! ' . $count . ' new ' . ( $count == 1 ? 'email has' : 'emails have' ) . ' been imported with your affiliate ID. You can view the full details of your affiliate program in your dashboard:' . PHP_EOL . PHP_EOL;
+
+				$content 	.= '	' . $dashboard_url . '#overview' . PHP_EOL . PHP_EOL;
+
+				$content 	.= 'We\'ll be here to help you with any step along the way. You can find answers to most questions and get in touch with us at '. $dashboard_url . '#rules' . PHP_EOL . PHP_EOL;
+
+				$content 	.= 'Yours,' . PHP_EOL;
+				$content 	.= 'The ' . $company . ' team' . PHP_EOL . PHP_EOL;
+
+				$content 	.= '==== Registration Summary ====' . PHP_EOL . PHP_EOL;
+				
+				$i = 1;
+				
+				foreach( $this->parent->users->referrals as $referral){
+				
+					$content 	.= 'Referral : ' . $referral->user_email . ' (' . ucfirst($referral->user_nicename) . ')' . PHP_EOL;
 					
-					update_user_meta( $referral->ID, $this->parent->_base . 'referredBy', [ $affiliate->ID => $affiliate->user_login ] );
-					
-					//assign referral to affiliate
-					
-					$referrals = get_user_meta($affiliate->ID,$this->parent->_base . 'referrals', true);
-					
-					if( !is_array($referrals) ) {
+					if( $i == 10 ){
 						
-						$referrals = [];
+						if( $count > $i ){
+							
+							$content 	.= ' and ' . ( $count - $i ). ' more...' . PHP_EOL;
+						}
+						
+						break;
 					}
 					else{
 						
-						foreach( $referrals as $key => $val){
-							
-							if(!is_string($val)){
-								
-								unset($referrals[$key]);
-							}
-						}
+						$i++;
 					}
-
-					$referrals[$referral->ID] = $referral->user_login;
-					
-					update_user_meta( $affiliate->ID, $this->parent->_base . 'referrals', $referrals );
-
-					//set referral counter
-					
-					$this->set_affiliate_counter($affiliate->ID, 'referrals', $referral->ID );
-					
-					//add referral stars
-					
-					/** 
-						we dont use do_action here
-						because all hooks are attached to the current id
-						and we want the referral id to be credited
-					**/
-					
-					$this->parent->stars->add_stars( $affiliate->ID, $this->parent->_base . 'ltple_referred_registration_stars' );
+				}
 				
-					// send notification
+				wp_mail($this->parent->users->referent->user_email, $title, $content);
+				
+				if( $this->parent->settings->options->emailSupport != $this->parent->users->referent->user_email ){
 					
-					$company	= ucfirst(get_bloginfo('name'));
-					
-					$dashboard_url = $this->parent->urls->editor . '?affiliate';
-					
-					$title 		= 'New referral user registration on ' . $company;
-					
-					$content 	= '';
-					$content 	.= 'Congratulations ' . ucfirst($affiliate->user_nicename) . '! A new user registration has been made using your affiliate ID. You can view the full details of your affiliate program in your dashboard:' . PHP_EOL . PHP_EOL;
-
-					$content 	.= '	' . $dashboard_url . '#overview' . PHP_EOL . PHP_EOL;
-
-					$content 	.= 'We\'ll be here to help you with any step along the way. You can find answers to most questions and get in touch with us at '. $dashboard_url . '#rules' . PHP_EOL . PHP_EOL;
-
-					$content 	.= 'Yours,' . PHP_EOL;
-					$content 	.= 'The ' . $company . ' team' . PHP_EOL . PHP_EOL;
-
-					$content 	.= '==== Registration Summary ====' . PHP_EOL . PHP_EOL;
-
-					$content 	.= 'Referral name: ' . ucfirst($referral->user_nicename) . PHP_EOL;
-					$content 	.= 'Referral email: ' . $referral->user_email . PHP_EOL;
-					
-					wp_mail($affiliate->user_email, $title, $content);
-					
-					if( $this->parent->settings->options->emailSupport != $affiliate->user_email ){
-						
-						wp_mail($this->parent->settings->options->emailSupport, $title, $content);
-					}
+					wp_mail($this->parent->settings->options->emailSupport, $title, $content);
 				}
 			}
 		}
