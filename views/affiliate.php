@@ -21,7 +21,7 @@
 		
 		echo'<div id="media_library">';
 
-			echo'<div class="col-xs-3 col-sm-2">';
+			echo'<div class="col-xs-3 col-sm-2" style="padding:0;">';
 			
 				echo'<ul class="nav nav-tabs tabs-left">';
 					
@@ -31,7 +31,9 @@
 					
 					echo'<li><a href="#urls" data-toggle="tab">My Referral urls</a></li>';
 					
-					echo'<li><a href="#material" data-toggle="tab">Marketing Material</a></li>';
+					echo'<li><a href="#materials" data-toggle="tab">Marketing Materials</a></li>';
+					
+					echo'<li><a href="#invitations" data-toggle="tab">Import Contacts <span class="label label-success pull-right">new</span></a></li>';
 					
 					echo'<li><a href="#rules" data-toggle="tab">Rules & policy</a></li>';
 					
@@ -292,7 +294,7 @@
 
 						echo'</div>';							
 
-						echo'<div class="tab-content row" style="margin:20px;">';
+						echo'<div class="tab-content row" style="padding:5px;">';
 
 							echo'<div class="col-xs-12 col-sm-6">';
 								
@@ -334,12 +336,28 @@
 						
 					echo'</div>'; //urls
 
-					// material
+					// materials
 					
-					echo'<div class="tab-pane" id="material">';
-
-						echo'<div class="tab-content row">';
+					echo'<div class="tab-pane" id="materials">';
+					
+						echo'<div class="bs-callout bs-callout-primary">';
 						
+							echo'<h4>';
+							
+								echo'Marketing Materials';
+								
+							echo'</h4>';
+						
+							echo'<p>';
+							
+								echo 'We’ve created banners, templates, and handouts for you to help your promotions.';
+							
+							echo'</p>';	
+
+						echo'</div>';
+						
+						echo'<div class="tab-content row">';
+
 						if( !empty($this->banners['key']) ){
 							
 							foreach($this->banners['key'] as $i => $title){
@@ -374,7 +392,41 @@
 						
 						echo'</div>';
 						
-					echo'</div>'; //material
+					echo'</div>'; //materials
+					
+					// invitations
+					
+					echo'<div class="tab-pane active" id="invitations">';
+
+						echo'<div class="bs-callout bs-callout-primary">';
+						
+							echo'<h4>';
+							
+								echo'Import Contacts';
+								
+							echo'</h4>';
+						
+							echo'<p>';
+							
+								echo 'Import your contacts with a nice email including your referral url & ID';
+							
+							echo'</p>';	
+
+						echo'</div>';							
+
+						echo'<div class="tab-content row">';
+		
+							echo'<div class="col-xs-12">';
+								
+								// get import emails
+								
+								echo $this->parent->email->get_invitation_form();								
+							
+							echo'</div>';			
+
+						echo'</div>';
+							
+					echo'</div>'; //materials
 					
 					// rules
 					
@@ -403,7 +455,7 @@
 										echo 'As a member of this affiliate program you are part of the team.'.PHP_EOL;
 										echo '<br>';
 										echo 'Anything you can possibly require to promote the product is our number one priority because we want to build human relationships with our collaborators and grow with them.'.PHP_EOL;
-										echo 'Therefore we can provide you with custom banners, texts and any other marketing material you d\'like to try. Just ask.'.PHP_EOL; 
+										echo 'Therefore we can provide you with custom banners, texts and any other marketing materials you d\'like to try. Just ask.'.PHP_EOL; 
 										echo '<br>';
 										echo 'You can reach us everyday of the week for a question or suggestion. The door is always open.'.PHP_EOL;
 																			

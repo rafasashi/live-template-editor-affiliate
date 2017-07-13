@@ -56,7 +56,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		$this->admin 	= new LTPLE_Affiliate_Admin_API( $this );
 		
-		$this->parent->register_post_type( 'affiliate-commission', __( 'Affiliate commissions', 'live-template-editor-client' ), __( 'Affiliate commission', 'live-template-editor-client' ), '', array(
+		$this->parent->register_post_type( 'affiliate-commission', __( 'Affiliate commissions', 'live-template-editor-affiliate' ), __( 'Affiliate commission', 'live-template-editor-affiliate' ), '', array(
 
 			'public' 				=> false,
 			'publicly_queryable' 	=> false,
@@ -77,7 +77,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			'menu_icon' 			=> 'dashicons-admin-post',
 		));
 		
-		$this->parent->register_taxonomy( 'commission-status', __( 'Status', 'live-template-editor-client' ), __( 'Commision status', 'live-template-editor-client' ),  array('affiliate-commission'), array(
+		$this->parent->register_taxonomy( 'commission-status', __( 'Status', 'live-template-editor-affiliate' ), __( 'Commision status', 'live-template-editor-affiliate' ),  array('affiliate-commission'), array(
 			'hierarchical' 			=> false,
 			'public' 				=> false,
 			'show_ui' 				=> true,
@@ -89,7 +89,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			'show_in_rest'          => true,
 			'rewrite' 				=> false,
 			'sort' 					=> '',
-		));	
+		));		
 		
 		add_action( 'add_meta_boxes', function(){
 		
@@ -1063,6 +1063,11 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}
 		}
 	}
+	
+	public function schedule_invitations(){
+		
+		//TODO
+	}	
 	
 	/**
 	 * Wrapper function to register a new post type
