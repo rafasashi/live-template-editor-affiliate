@@ -396,7 +396,7 @@
 					
 					// invitations
 					
-					echo'<div class="tab-pane active" id="invitations">';
+					echo'<div class="tab-pane" id="invitations">';
 
 						echo'<div class="bs-callout bs-callout-primary">';
 						
