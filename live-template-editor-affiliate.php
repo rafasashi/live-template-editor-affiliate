@@ -46,7 +46,12 @@
 	
 	add_filter( 'plugins_loaded', function(){
 
-		$dev_ip = '109.28.69.143';
+		$dev_ip = '';
+		
+		if( defined('MASTER_ADMIN_IP') ){
+			
+			$dev_ip = MASTER_ADMIN_IP;
+		}
 		
 		$mode = ( ($_SERVER['REMOTE_ADDR'] == $dev_ip || ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] == $dev_ip )) ? '-dev' : '');
 		
