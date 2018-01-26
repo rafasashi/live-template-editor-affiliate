@@ -46,14 +46,14 @@
 	
 	add_filter( 'plugins_loaded', function(){
 
-		$dev_ip = '';
+		$dev_ips = array();
 		
-		if( defined('MASTER_ADMIN_IP') ){
+		if( defined('MASTER_ADMIN_IPS') ){
 			
-			$dev_ip = MASTER_ADMIN_IP;
+			$dev_ips = MASTER_ADMIN_IPS;
 		}
 		
-		$mode = ( ($_SERVER['REMOTE_ADDR'] == $dev_ip || ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] == $dev_ip )) ? '-dev' : '');
+		$mode = ( ( in_array( $_SERVER['REMOTE_ADDR'], $dev_ips ) || ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) && in_array( $_SERVER['HTTP_X_FORWARDED_FOR'], $dev_ips ) )) ? '-dev' : '');
 		
 		if( $mode == '-dev' ){
 			
