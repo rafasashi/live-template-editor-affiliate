@@ -63,7 +63,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			'exclude_from_search' 	=> true,
 			'show_ui' 				=> true,
 			'show_in_menu'		 	=> 'affiliate-commission',
-			'show_in_nav_menus' 	=> true,
+			'show_in_nav_menus' 	=> false,
 			'query_var' 			=> true,
 			'can_export' 			=> true,
 			'rewrite' 				=> false,
@@ -890,6 +890,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 							
 							echo $pre.$counter['month'][$y][$m].$app;
 						}
+						
 					echo'</td>';													
 				
 				echo'</tr>';
@@ -960,17 +961,107 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 							
 								$this->get_affiliate_overview($this->parent->editedUser->affiliate_clicks);						
 								
+								if( $this->parent->user->is_admin ){
+
+									echo '<table>';
+									
+										echo'<tr>';
+										
+											echo'<td>';
+											
+												echo 'Add / Remove';					
+												
+											echo'</td>';									
+											
+											echo'<td>';								
+								
+												echo $this->parent->admin->display_field( array(
+										
+													'type'				=> 'number',
+													'id'				=> $this->parent->_base . 'aff_clicks',
+													'description'		=> '',
+													'default'			=> 0,
+													
+												), false, false );
+												
+											echo'</td>';
+
+										echo'</tr>';
+										
+									echo '</table>';
+								}								
+								
 							echo'</td>';	
 							
 							echo'<td>';
 							
 								$this->get_affiliate_overview($this->parent->editedUser->affiliate_referrals);							
+
+								if( $this->parent->user->is_admin ){
+
+									echo '<table>';
+									
+										echo'<tr>';
+										
+											echo'<td>';
+											
+												echo 'Add / Remove';					
+												
+											echo'</td>';									
+											
+											echo'<td>';								
+								
+												echo $this->parent->admin->display_field( array(
+										
+													'type'				=> 'number',
+													'id'				=> $this->parent->_base . 'aff_referrals',
+													'description'		=> '',
+													'default'			=> 0,
+													
+												), false, false );
+												
+											echo'</td>';
+
+										echo'</tr>';
+										
+									echo '</table>';
+								}
 								
 							echo'</td>';									
 							
 							echo'<td>';
 
 								$this->get_affiliate_overview($this->parent->editedUser->affiliate_commission,true,'$');																	
+								
+								if( $this->parent->user->is_admin ){
+
+									echo '<table>';
+									
+										echo'<tr>';
+										
+											echo'<td>';
+											
+												echo 'Add / Remove';					
+												
+											echo'</td>';									
+											
+											echo'<td>';								
+								
+												echo $this->parent->admin->display_field( array(
+										
+													'type'				=> 'number',
+													'id'				=> $this->parent->_base . 'aff_commission',
+													'description'		=> '',
+													'default'			=> 0,
+													
+												), false, false );
+												
+											echo'</td>';
+
+										echo'</tr>';
+										
+									echo '</table>';
+								}								
 								
 							echo'</td>';
 
@@ -1004,7 +1095,19 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 					
 			echo'</div>';
 			
-			if(!empty($this->parent->editedUser->referrals)){
+			echo'<div class="postbox" style="min-height:45px;">';
+				
+				echo'<h3 style="margin:10px;width:300px;display: inline-block;">Pending balance</h3>';
+				
+				echo'<div style="display:inline-block;">';
+					
+					echo $this->get_affiliate_balance($this->parent->editedUser->ID);
+					
+				echo'</div>';
+				
+			echo'</div>';
+			
+			if( !empty($this->parent->editedUser->referrals) ){
 				
 				echo '<div class="postbox" style="min-height:45px;">';
 					
@@ -1055,12 +1158,38 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	
 	public function save_user_affiliate( $user_id ) {
 		
-		if(isset($_POST[$this->parent->_base . 'user-programs'])){
+		$field = $this->parent->_base . 'user-programs';
+		
+		if( isset($_POST[$field]) && in_array( 'affiliate', $_POST[$field]) ){
 
-			if( in_array( 'affiliate', $_POST[$this->parent->_base . 'user-programs']) ){
-				
-				$this->parent->email->schedule_trigger( 'affiliate-approved',  $user_id);
-			}
+			$this->parent->email->schedule_trigger( 'affiliate-approved',  $user_id);
+		}
+		
+		$field = $this->parent->_base . 'aff_clicks';
+		
+		if( isset($_POST[$field]) && is_numeric($_POST[$field]) ){
+			
+			$amount = intval($_POST[$field]);
+			
+			$this->set_affiliate_counter($user_id, 'clicks', 'updated-'.time() . '_' . $amount);
+		}
+
+		$field = $this->parent->_base . 'aff_referrals';
+		
+		if( isset($_POST[$field]) && is_numeric($_POST[$field]) ){
+			
+			$amount = intval($_POST[$field]);
+			
+			$this->set_affiliate_counter($user_id, 'referrals', 'updated-'.time() . '_' . $amount);
+		}		
+		
+		$field = $this->parent->_base . 'aff_commission';
+		
+		if( isset($_POST[$field]) && is_numeric($_POST[$field]) ){
+			
+			$amount = intval($_POST[$field]);
+			
+			$this->set_affiliate_counter($user_id, 'commission', 'updated-'.time() . '_' . $amount);
 		}
 	}
 	
