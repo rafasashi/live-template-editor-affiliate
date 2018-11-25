@@ -1264,8 +1264,8 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	 */
 	public function admin_enqueue_styles ( $hook = '' ) {
 		
-		wp_register_style( $this->_token . '-admin', esc_url( $this->assets_url ) . 'css/admin.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-admin' );
+		//wp_register_style( $this->_token . '-admin', esc_url( $this->assets_url ) . 'css/admin.css', array(), $this->_version );
+		//wp_enqueue_style( $this->_token . '-admin' );
 	} // End admin_enqueue_styles ()
 
 	/**
@@ -1276,8 +1276,8 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	 */
 	public function admin_enqueue_scripts ( $hook = '' ) {
 		
-		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
-		wp_enqueue_script( $this->_token . '-admin' );
+		//wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
+		//wp_enqueue_script( $this->_token . '-admin' );
 	} // End admin_enqueue_scripts ()
 
 	/**
