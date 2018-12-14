@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class LTPLE_Affiliate extends LTPLE_Client_Object {
-	
+
 	/**
 	 * The single instance of LTPLE_Addon.
 	 * @var 	object
@@ -11,16 +11,16 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	 * @since 	1.0.0
 	 */
 	private static $_instance = null;
-	
+
 	var $parent;
 	var $list;
 	var $status;
-	
+
 	/**
 	 * Constructor function
 	 */
 	public function __construct ( $file='', $parent, $version = '1.0.0' ) {
-
+	
 		$this->parent 	= $parent;
 
 		$this->_version = $version;
@@ -188,26 +188,56 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			
 		});
 		
-		add_action( 'ltple_editor', function(){
+		// add panel shortocode
 		
-			if( isset($_GET['affiliate']) ){
-
-				include($this->views . $this->parent->_dev .'/affiliate.php');
-				
-				$this->parent->viewIncluded = true;
-			}
-		});
+		add_shortcode('ltple-client-affiliate', array( $this , 'get_panel_shortcode' ) );	
+		
+		// add panel url
+		
+		add_filter( 'ltple_urls', array( $this, 'get_panel_url'));			
+		
+		// add link to theme menu
 		
 		add_action( 'ltple_view_my_profile', function(){
 			
 			echo'<li style="position:relative;">';
 				
-				echo '<a href="'. $this->parent->urls->editor .'?affiliate"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Affiliate Program</a>';
+				echo '<a href="'. $this->parent->urls->affiliate .'"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Affiliate Program</a>';
 
 			echo'</li>';
 		});
 	}
 	
+	public function get_panel_url(){
+		
+		$slug = get_option( $this->parent->_base . 'affiliateSlug' );
+		
+		if( empty( $slug ) ){
+			
+			$post_id = wp_insert_post( array(
+			
+				'post_title' 		=> 'Affiliate',
+				'post_type'     	=> 'page',
+				'comment_status' 	=> 'closed',
+				'ping_status' 		=> 'closed',
+				'post_content' 		=> '[ltple-client-affiliate]',
+				'post_status' 		=> 'publish',
+				'menu_order' 		=> 0
+			));
+			
+			$slug = update_option( $this->parent->_base . 'affiliateSlug', get_post($post_id)->post_name );
+		}
+		
+		$this->parent->urls->affiliate = $this->parent->urls->home . '/' . $slug . '/';		
+	}	
+	
+	public function get_panel_shortcode(){
+		
+		include($this->parent->views . '/navbar.php');
+		
+		include($this->views . '/affiliate.php');
+	}
+
 	public function get_commission_status(){
 
 		$this->status = $this->get_terms( 'commission-status', array(
@@ -216,7 +246,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			'paid'  	=> 'Paid',
 		));
 	}
-	
+
 	public function get_affiliate_commission_fields(){
 				
 		$fields=[];
@@ -285,7 +315,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		return $fields;
 	}
-	
+
 	public function init_affiliate(){
 		
 		if( is_admin() ){
@@ -360,7 +390,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}			
 		}
 	}
-	
+
 	public function filter_affiliates( $query ) {
 
 		// alter the user query to add my meta_query
@@ -375,12 +405,12 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			),
 		));
 	}
-	
+
 	public function get_affiliate_tab(){
 		
 		echo '<a class="nav-tab ' . ( $this->parent->users->view == 'affiliates' ? 'nav-tab-active' : '' ) . '" href="users.php?ltple_view=affiliates">Affiliates</a>';
 	}
-	
+
 	public function update_affiliates_table($column) {
 		
 		$column=[];
@@ -393,7 +423,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		return $column;
 	}
-	
+
 	public function modify_affiliates_table_row($val, $column_name, $user_id) {
 		
 		if(!isset($this->list->{$user_id})){
@@ -426,7 +456,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		return $row;
 	}
-	
+
 	public function get_affiliate_counter($user_id, $type = 'clicks'){
 		
 		$counter = get_user_meta( $user_id, $this->parent->_base . 'affiliate_'.$type, true);
@@ -477,7 +507,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		return $counter;
 	}
-	
+
 	public function set_affiliate_counter($user_id, $type = 'clicks', $id, $counter = null){
 		
 		$z 	= date('z'); //day of the year
@@ -548,9 +578,9 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		return $counter;
 	}
-	
+
 	public function set_affiliate_commission($user_id, $data, $id, $currency='$'){
-	
+
 		$pourcent_price = 50;
 		$pourcent_fee 	= 25;
 		
@@ -662,7 +692,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}
 		}
 	}
-	
+
 	public function get_affiliate_balance($user_id, $currency='$'){
 		
 		$balance = 0;
@@ -696,7 +726,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		return $currency . number_format($balance, 2, '.', '');
 	}
-	
+
 	public function ref_user_added(){
 				
 		if( is_numeric( $this->parent->request->ref_id ) ){
@@ -739,8 +769,8 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}
 		}
 	}
-	
-	
+
+
 	public function ref_users_bulk_added(){
 				
 		if( !empty($this->parent->users->referrals) ){
@@ -805,7 +835,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}
 		}
 	}
-	
+
 	public function get_affiliate_overview( $counter, $sum = false, $pre = '', $app = '' ){
 
 		$z 	= date('z'); //day of the year
@@ -922,7 +952,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		echo'</table>';		
 	}
-	
+
 	public function get_user_referrals( $user ) {
 		
 		if( current_user_can( 'administrator' ) ){
@@ -1155,7 +1185,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}
 		}	
 	}
-	
+
 	public function save_user_affiliate( $user_id ) {
 		
 		$field = $this->parent->_base . 'user-programs';
@@ -1192,12 +1222,12 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			$this->set_affiliate_counter($user_id, 'commission', 'updated-'.time() . '_' . $amount);
 		}
 	}
-	
+
 	public function schedule_invitations(){
 		
 		//TODO
 	}	
-	
+
 	/**
 	 * Wrapper function to register a new post type
 	 * @param  string $post_type   Post type name
@@ -1299,12 +1329,12 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	 */
 	public function load_plugin_textdomain () {
 		
-	    $domain = $this->settings->plugin->slug;
+		$domain = $this->settings->plugin->slug;
 
-	    $locale = apply_filters( 'plugin_locale', get_locale(), $domain );
+		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
-	    load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
-	    load_plugin_textdomain( $domain, false, dirname( plugin_basename( $this->file ) ) . '/lang/' );
+		load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
+		load_plugin_textdomain( $domain, false, dirname( plugin_basename( $this->file ) ) . '/lang/' );
 	} // End load_plugin_textdomain ()
 
 	/**

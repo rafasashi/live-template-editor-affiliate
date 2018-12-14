@@ -72,6 +72,15 @@ class LTPLE_Affiliate_Settings {
 
 		$settings = [];
 		
+		$settings['urls']['fields'][] = array(
+		
+			'id' 			=> 'affiliateSlug',
+			'label'			=> __( 'Affiliate' , $this->plugin->slug ),
+			'description'	=> '[ltple-client-affiliate]',
+			'type'			=> 'slug',
+			'placeholder'	=> __( 'affiliate', $this->plugin->slug )
+		);
+		
 		$settings['affiliate'] = array(
 		
 			'title'					=> __( 'Affiliate', $this->plugin->slug ),
