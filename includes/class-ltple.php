@@ -200,7 +200,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		add_action( 'ltple_view_my_profile', function(){
 			
-			echo'<li style="position:relative;">';
+			echo'<li style="position:relative;background:#182f42;">';
 				
 				echo '<a href="'. $this->parent->urls->affiliate .'"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Affiliate Program</a>';
 
