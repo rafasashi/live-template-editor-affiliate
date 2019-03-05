@@ -1270,8 +1270,9 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	 */
 	public function enqueue_styles () {
 		
-		wp_register_style( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'css/frontend.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-frontend' );
+		//wp_register_style( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'css/frontend.css', array(), $this->_version );
+		//wp_enqueue_style( $this->_token . '-frontend' );
+	
 	} // End enqueue_styles ()
 
 	/**
@@ -1282,8 +1283,9 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	 */
 	public function enqueue_scripts () {
 		
-		wp_register_script( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'js/frontend' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
-		wp_enqueue_script( $this->_token . '-frontend' );
+		//wp_register_script( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'js/frontend' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
+		//wp_enqueue_script( $this->_token . '-frontend' );
+	
 	} // End enqueue_scripts ()
 
 	/**
