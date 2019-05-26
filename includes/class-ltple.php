@@ -144,11 +144,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		});
 		
 		add_action( 'ltple_user_loaded', function(){
-		
-			// get user programs
-			
-			$this->parent->user->programs = json_decode( get_user_meta( $this->parent->user->ID, $this->parent->_base . 'user-programs',true) );
-			
+
 			// get user affiliate
 			
 			$this->parent->user->is_affiliate = $this->parent->programs->has_program('affiliate', $this->parent->user->ID, $this->parent->user->programs);
@@ -205,7 +201,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				echo '<a href="'. $this->parent->urls->affiliate .'"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Affiliate Program</a>';
 
 			echo'</li>';
-		});
+		},10);
 	}
 	
 	public function get_panel_url(){
@@ -367,7 +363,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		}
 		else{
 			
-			if(isset($_GET['affiliate'])){
+			if( strpos( $this->parent->urls->current, $this->parent->urls->affiliate ) === 0 ){
 				
 				$this->banners = get_option($this->parent->_base . 'affiliate_banners');
 			
@@ -837,120 +833,123 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	}
 
 	public function get_affiliate_overview( $counter, $sum = false, $pre = '', $app = '' ){
-
-		$z 	= date('z'); //day of the year
-		$w 	= date('W'); //week of the year
-		$m 	= date('m'); //month of the year
-		$y 	= date('Y'); //year		
+		
+		if( !empty($counter) ){
 			
-		echo'<table class="table table-striped table-hover">';
-		
-			echo'<tbody>';
+			$z 	= date('z'); //day of the year
+			$w 	= date('W'); //week of the year
+			$m 	= date('m'); //month of the year
+			$y 	= date('Y'); //year		
 				
-				// today
-				
-				echo'<tr style="font-size:18px;font-weight:bold;">';
-				
-					echo'<td>';
-						echo'Today';
-					echo'</td>';
-
-					echo'<td>';
+			echo'<table class="table table-striped table-hover">';
+			
+				echo'<tbody>';
 					
-						if($sum){
-							
-							$today = 0;
-							
-							foreach( $counter['today'][$y][$z] as $value){
+					// today
+					
+					echo'<tr style="font-size:18px;font-weight:bold;">';
+					
+						echo'<td>';
+							echo'Today';
+						echo'</td>';
+
+						echo'<td>';
+						
+							if($sum){
 								
-								$today += $value;
+								$today = 0;
+								
+								foreach( $counter['today'][$y][$z] as $value){
+									
+									$today += $value;
+								}
+
+								echo $pre . number_format($today, 2, '.', '').$app;
 							}
-
-							echo $pre . number_format($today, 2, '.', '').$app;
-						}
-						else{
+							else{
+								
+								// count
+								
+								echo $pre.count($counter['today'][$y][$z]).$app;
+							}
 							
-							// count
-							
-							echo $pre.count($counter['today'][$y][$z]).$app;
-						}
-						
-					echo'</td>';													
-				
-				echo'</tr>';
-				
-				// week
-				
-				echo'<tr>';
-				
-					echo'<td>';
-						echo'Week';
-					echo'</td>';
-
-					echo'<td>';
-						
-						if($sum){
-							
-							echo $pre.number_format($counter['week'][$y][$w], 2, '.', '').$app;
-						}
-						else{
-							
-							echo $pre.$counter['week'][$y][$w].$app;
-						}
-						
-					echo'</td>';													
-				
-				echo'</tr>';
-				
-				// month
-				
-				echo'<tr>';
-				
-					echo'<td>';
-						echo'Month';
-					echo'</td>';
-
-					echo'<td>';
+						echo'</td>';													
 					
-						if($sum){
-							
-							echo $pre.number_format($counter['month'][$y][$m], 2, '.', '').$app;
-						}
-						else{
-							
-							echo $pre.$counter['month'][$y][$m].$app;
-						}
-						
-					echo'</td>';													
-				
-				echo'</tr>';
-				
-				// Total
-				
-				echo'<tr>';
-				
-					echo'<td>';
-						echo'All Time';
-					echo'</td>';
-
-					echo'<td>';
+					echo'</tr>';
 					
-						if($sum){
+					// week
+					
+					echo'<tr>';
+					
+						echo'<td>';
+							echo'Week';
+						echo'</td>';
+
+						echo'<td>';
 							
-							echo $pre.number_format($counter['total'], 2, '.', '').$app;
-						}
-						else{
+							if($sum){
+								
+								echo $pre.number_format($counter['week'][$y][$w], 2, '.', '').$app;
+							}
+							else{
+								
+								echo $pre.$counter['week'][$y][$w].$app;
+							}
 							
-							echo $pre.$counter['total'].$app;
-						}
+						echo'</td>';													
+					
+					echo'</tr>';
+					
+					// month
+					
+					echo'<tr>';
+					
+						echo'<td>';
+							echo'Month';
+						echo'</td>';
+
+						echo'<td>';
 						
-					echo'</td>';													
-				
-				echo'</tr>';
-				
-			echo'</tbody>';
-		
-		echo'</table>';		
+							if($sum){
+								
+								echo $pre.number_format($counter['month'][$y][$m], 2, '.', '').$app;
+							}
+							else{
+								
+								echo $pre.$counter['month'][$y][$m].$app;
+							}
+							
+						echo'</td>';													
+					
+					echo'</tr>';
+					
+					// Total
+					
+					echo'<tr>';
+					
+						echo'<td>';
+							echo'All Time';
+						echo'</td>';
+
+						echo'<td>';
+						
+							if($sum){
+								
+								echo $pre.number_format($counter['total'], 2, '.', '').$app;
+							}
+							else{
+								
+								echo $pre.$counter['total'].$app;
+							}
+							
+						echo'</td>';													
+					
+					echo'</tr>';
+					
+				echo'</tbody>';
+			
+			echo'</table>';	
+		}		
 	}
 
 	public function get_user_referrals( $user ) {
@@ -1137,6 +1136,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				
 			echo'</div>';
 			
+			/*
 			if( !empty($this->parent->editedUser->referrals) ){
 				
 				echo '<div class="postbox" style="min-height:45px;">';
@@ -1183,6 +1183,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 					
 				echo'</div>';
 			}
+			*/
 		}	
 	}
 

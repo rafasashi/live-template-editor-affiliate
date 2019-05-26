@@ -937,17 +937,3 @@
 		echo '</div>';
 	}
 	
-	?>
-	
-	<script>
-
-		;(function($){		
-			
-			$(document).ready(function(){
-				
-				
-			});
-			
-		})(jQuery);
-
-	</script>
