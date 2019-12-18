@@ -580,10 +580,19 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		$pourcent_price = 50;
 		$pourcent_fee 	= 25;
 		
-		$total = ( $data['price'] + $data['fee'] );
-
-		$amount =  ( ( $data['price'] * ( $pourcent_price / 100 ) ) + ( $data['fee'] * ( $pourcent_fee / 100 ) ) );
+		if( $this->parent->tax->is_enabled() ){
+			
+			if( $vat_rate = $this->parent->tax->get_vat_rate() ){
+				
+				$price 	= $data['price'] / ( 1 + ( $vat_rate / 100 ) );
+				$fee 	= $data['fee'] 	 / ( 1 + ( $vat_rate / 100 ) );
+			}
+		}
 		
+		$total = ( $price + $fee );
+		
+		$amount =  ( ( $price * ( $pourcent_price / 100 ) ) + ( $fee * ( $pourcent_fee / 100 ) ) );
+
 		if( $amount > 0 ){
 			
 			$pourcent = ( $total > 0 ? ( ( $amount / $total ) * 100 ) : 0 );
@@ -665,7 +674,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 								$content 	.= '==== Commission Summary ====' . PHP_EOL . PHP_EOL;
 
 								$content 	.= 'Plan purchased: ' . $data['name'] . PHP_EOL;
-								$content 	.= 'Total amount: ' . $currency . $total . PHP_EOL;
+								$content 	.= 'Total amount (ex VAT): ' . $currency . $total . PHP_EOL;
 								$content 	.= 'Pourcentage: ' . $pourcent . '%' . PHP_EOL;
 								$content 	.= 'Your commission: ' . $currency . $amount . PHP_EOL;
 								$content 	.= 'Customer email: ' . $data['subscriber'] . PHP_EOL;
