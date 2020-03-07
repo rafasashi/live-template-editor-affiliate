@@ -43,7 +43,7 @@
 				
 			echo'</div>';
 
-			echo'<div id="content" style="border-left: 1px solid #ddd;background:#fff;padding-bottom:15px;min-height:500px;">';
+			echo'<div id="content" style="border-left: 1px solid #ddd;background:#fbfbfb;padding-top:0px !important;min-height:500px;">';
 				
 				echo'<div class="tab-content">';
 
@@ -166,7 +166,7 @@
 								
 								echo'<div class="col-xs-9">';
 									
-									echo'<input class="form-control" type="text" value="' . $this->parent->urls->editor . '?ri=' . $this->parent->user->refId . '" />';
+									echo'<input class="form-control" type="text" value="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '" />';
 								
 								echo'</div>';
 						
@@ -310,7 +310,7 @@
 							
 									echo'<h3>My ref link to the main page</h3>';
 								
-									echo'<input class="form-control" type="text" value="' . $this->parent->urls->editor . '?ri=' . $this->parent->user->refId . '" />';
+									echo'<input class="form-control" type="text" value="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '" />';
 								
 								echo'</div>';
 								
@@ -374,13 +374,13 @@
 										
 										echo'<div class="panel-body">';
 										
-											echo '<a href="' . $this->parent->urls->editor . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>';
+											echo '<a href="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>';
 
 										echo'</div>';
 										
 										echo'<div class="panel-footer">';
 										
-											echo'<input type="text" class="form-control" value="'.htmlentities('<a href="' . $this->parent->urls->editor . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>').'"/>';
+											echo'<input type="text" class="form-control" value="'.htmlentities('<a href="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>').'"/>';
 										
 										echo'</div>';
 										

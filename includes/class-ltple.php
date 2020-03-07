@@ -657,7 +657,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 								
 								$company	= ucfirst(get_bloginfo('name'));
 								
-								$dashboard_url = $this->parent->urls->editor . '?affiliate';
+								$dashboard_url = $this->parent->urls->home . '/affiliate/';
 								
 								$title 		= 'Commission of ' . $currency . $amount . ' from ' . $company;
 								
@@ -746,7 +746,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				
 				$company	= ucfirst(get_bloginfo('name'));
 				
-				$dashboard_url = $this->parent->urls->editor . '?affiliate';
+				$dashboard_url = $this->parent->urls->home . '/affiliate/';
 				
 				$title 		= 'New referral user registration on ' . $company;
 				
@@ -794,7 +794,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				$company	= ucfirst(get_bloginfo('name'));
 				$count		= count($this->parent->users->referrals);
 				
-				$dashboard_url = $this->parent->urls->editor . '?affiliate';
+				$dashboard_url = $this->parent->urls->home . '/affiliate/';
 				
 				$title 		= 'Referral users imported on ' . $company;
 				
