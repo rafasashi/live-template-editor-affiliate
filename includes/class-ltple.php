@@ -1,7 +1,8 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) exit;
-
+if ( ! class_exists( 'LTPLE_Client_Object' ) ) return;
+	
 class LTPLE_Affiliate extends LTPLE_Client_Object {
 
 	/**
