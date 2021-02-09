@@ -45,7 +45,7 @@
 
 			echo'<div id="content" style="border-left: 1px solid #ddd;background:#fbfbfb;padding-top:0px !important;min-height:500px;">';
 				
-				echo'<div class="tab-content">';
+				echo'<div class="tab-content col-xs-12">';
 
 					//overview
 					
