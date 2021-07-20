@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Live Template Editor Affiliate
- * Version: 1.0.2.2
+ * Version: 1.0.2.3
  * Plugin URI: https://github.com/rafasashi
  * Description: Another Live Template Editor affiliate.
  * Author: Rafasashi

@@ -16,6 +16,9 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	var $parent;
 	var $list;
 	var $status;
+	
+	var $pourcent_price = 30;
+	var $pourcent_fee 	= 20;
 
 	/**
 	 * Constructor function
@@ -578,9 +581,13 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 
 	public function set_affiliate_commission($user_id, $data, $id, $currency='$'){
 
-		$pourcent_price = 50;
-		$pourcent_fee 	= 25;
+		$pourcent_price = $this->pourcent_price;
+		$pourcent_fee 	= $this->pourcent_fee;
 		
+		$price 	= $data['price'];
+		$fee 	= $data['fee'];
+		
+		/*
 		if( $this->parent->tax->is_enabled() ){
 			
 			if( $vat_rate = $this->parent->tax->get_vat_rate() ){
@@ -589,6 +596,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				$fee 	= $data['fee'] 	 / ( 1 + ( $vat_rate / 100 ) );
 			}
 		}
+		*/
 		
 		$total = ( $price + $fee );
 		

@@ -186,9 +186,9 @@
 										
 										echo'<div class="col-xs-6">';
 										
-											echo'<b>50%</b> on the first month of any subscription';
+											echo'<b>' . $this->pourcent_price . '%</b> on the first month of any subscription';
 											echo'<br>';
-											echo'<b>25%</b> on any one-time fee charges';
+											echo'<b>' . $this->pourcent_fee . '%</b> on any one-time fee charges';
 											
 										echo'</div>';	
 
@@ -479,9 +479,9 @@
 								 
 									echo'<div class="panel-body">';
 									
-										echo'<b>50% commission</b> on the first month of any subscription';
+										echo'<b>' . $this->pourcent_price . '% commission</b> on the first month of any subscription';
 										echo'<br>';
-										echo'<b>25% commission</b> on any one-time fee charges';
+										echo'<b>' . $this->pourcent_fee . '% commission</b> on any one-time fee charges';
 									
 									echo'</div>';
 								  
