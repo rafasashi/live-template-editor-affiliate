@@ -177,12 +177,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}
 		});
 
-		add_action( 'ltple_plan_subscribed', function($plan,$user){
-		
-			// handle affiliate commission
-					
-			$this->set_affiliate_commission($plan,$user);
-		});
+		add_action('ltple_plan_subscribed', array($this,'set_affiliate_commission'),10,2);
 		
 		// add panel shortocode
 		
@@ -236,11 +231,16 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 
 	public function get_commission_status(){
 
-		$this->status = $this->get_terms( 'commission-status', array(
-				
-			'pending'  	=> 'Pending',
-			'paid'  	=> 'Paid',
-		));
+		if( is_null($this->status) ){
+
+			$this->status = $this->get_terms( 'commission-status', array(
+					
+				'pending'  	=> 'Pending',
+				'paid'  	=> 'Paid',
+			));
+		}
+		
+		return $this->status;
 	}
 
 	public function get_affiliate_commission_fields(){
@@ -255,7 +255,9 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		$status = [];
 		
-		foreach($this->status as $term){
+		$terms = $this->get_commission_status();
+		
+		foreach($terms as $term){
 			
 			$status[$term->slug] = $term->name;
 		}
@@ -575,8 +577,10 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		return $counter;
 	}
 
-	public function set_affiliate_commission($plan,$user,$currency='$'){
-
+	public function set_affiliate_commission($plan,$user){
+		
+		$currency='$';
+		
 		$json = json_encode($plan,JSON_PRETTY_PRINT);
 
 		$id = md5($json);
@@ -592,16 +596,16 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		$total = ( $price + $fee );
 		
 		$amount =  ( ( $price * ( $pourcent_price / 100 ) ) + ( $fee * ( $pourcent_fee / 100 ) ) );
-
+		
 		if( $amount > 0 ){
 			
 			$pourcent = ( $total > 0 ? ( ( $amount / $total ) * 100 ) : 0 );
 			
 			// handle affiliate commission
-
+			
 			if( $referredBy = get_user_meta($user_id, $this->parent->_base . 'referredBy', true) ){
-
-				if( $affiliate = get_userdata(key($referredBy)) ){
+				
+				if( $affiliate = get_user_by('id',key($referredBy)) ){
 					
 					// get commission
 					
@@ -619,7 +623,9 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 						
 						$pending_id = false;
 						
-						foreach( $this->status as $status ){
+						$status = $this->get_commission_status();
+						
+						foreach( $status as $status ){
 							
 							if( $status->slug == 'pending' ){
 								
@@ -632,7 +638,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 					
 							// insert commission
 
-							if($commission_id = wp_insert_post(array(
+							if( $commission_id = wp_insert_post(array(
 						
 								'post_author' 	=> $affiliate->ID,
 								'post_title' 	=> $currency . $amount . ' over ' . $currency . $total . ' (' . $pourcent . '%)',
