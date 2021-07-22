@@ -176,7 +176,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				}
 			}
 		});
-		
+
 		add_action( 'ltple_plan_subscribed', function($plan,$user){
 		
 			// handle affiliate commission
@@ -1197,7 +1197,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	}
 
 	public function save_user_affiliate( $user_id ) {
-		
+
 		$field = $this->parent->_base . 'user-programs';
 		
 		if( isset($_POST[$field]) && in_array( 'affiliate', $_POST[$field]) ){
