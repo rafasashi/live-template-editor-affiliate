@@ -177,15 +177,11 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			}
 		});
 		
-		add_action( 'ltple_plan_subscribed', function(){
+		add_action( 'ltple_plan_subscribed', function($plan,$user){
 		
 			// handle affiliate commission
 					
-			if(!empty($_GET['pk'])){
-			
-				$this->set_affiliate_commission($this->parent->user->ID, $this->parent->plan->data, $_GET['pk'] );
-			}
-			
+			$this->set_affiliate_commission($plan,$user);
 		});
 		
 		// add panel shortocode
@@ -579,24 +575,19 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		return $counter;
 	}
 
-	public function set_affiliate_commission($user_id, $data, $id, $currency='$'){
+	public function set_affiliate_commission($plan,$user,$currency='$'){
+
+		$json = json_encode($plan,JSON_PRETTY_PRINT);
+
+		$id = md5($json);
+
+		$user_id = $user->ID;
 
 		$pourcent_price = $this->pourcent_price;
 		$pourcent_fee 	= $this->pourcent_fee;
 		
-		$price 	= $data['price'];
-		$fee 	= $data['fee'];
-		
-		/*
-		if( $this->parent->tax->is_enabled() ){
-			
-			if( $vat_rate = $this->parent->tax->get_vat_rate() ){
-				
-				$price 	= $data['price'] / ( 1 + ( $vat_rate / 100 ) );
-				$fee 	= $data['fee'] 	 / ( 1 + ( $vat_rate / 100 ) );
-			}
-		}
-		*/
+		$price 	= $plan['price'];
+		$fee 	= $plan['fee'];
 		
 		$total = ( $price + $fee );
 		
@@ -628,7 +619,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 						
 						$pending_id = false;
 						
-						foreach($this->status as $status){
+						foreach( $this->status as $status ){
 							
 							if( $status->slug == 'pending' ){
 								
@@ -654,7 +645,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 
 								wp_set_object_terms($commission_id, $pending_id, 'commission-status' );
 								
-								update_post_meta( $commission_id, 'commission_details', json_encode($data,JSON_PRETTY_PRINT));	
+								update_post_meta( $commission_id, 'commission_details', $json);	
 
 								update_post_meta( $commission_id, 'commission_amount', $amount);
 							
@@ -682,11 +673,11 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 
 								$content 	.= '==== Commission Summary ====' . PHP_EOL . PHP_EOL;
 
-								$content 	.= 'Plan purchased: ' . $data['name'] . PHP_EOL;
-								$content 	.= 'Total amount (ex VAT): ' . $currency . $total . PHP_EOL;
-								$content 	.= 'Pourcentage: ' . $pourcent . '%' . PHP_EOL;
+								$content 	.= 'Plan purchased: ' . $plan['name'] . PHP_EOL;
+								$content 	.= 'Total amount: ' . $currency . $total . PHP_EOL;
+								$content 	.= 'Percentage: ' . $pourcent . '%' . PHP_EOL;
 								$content 	.= 'Your commission: ' . $currency . $amount . PHP_EOL;
-								$content 	.= 'Customer email: ' . $data['subscriber'] . PHP_EOL;
+								$content 	.= 'Customer email: ' . $plan['subscriber'] . PHP_EOL;
 								
 								wp_mail($affiliate->user_email, $title, $content);
 								
