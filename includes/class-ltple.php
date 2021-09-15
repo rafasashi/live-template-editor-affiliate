@@ -590,8 +590,8 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		$pourcent_price = $this->pourcent_price;
 		$pourcent_fee 	= $this->pourcent_fee;
 		
-		$price 	= $plan['price'];
-		$fee 	= $plan['fee'];
+		$price 	= isset($plan['price']) ? $plan['price'] : 0;
+		$fee 	= isset($plan['fee']) ? $plan['fee'] : 0;
 		
 		$total = ( $price + $fee );
 		
