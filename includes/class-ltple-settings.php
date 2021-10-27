@@ -43,35 +43,17 @@ class LTPLE_Affiliate_Settings {
 		$this->plugin 		 	= new stdClass();
 		$this->plugin->slug  	= 'live-template-editor-affiliate';
 		
-		add_action('ltple_plugin_settings', array($this, 'plugin_info' ) );
-		
-		add_action('ltple_plugin_settings', array($this, 'settings_fields' ) );
+		add_action('ltple_settings_fields', array($this, 'settings_fields' ) );
 		
 		add_action( 'ltple_admin_menu' , array( $this, 'add_menu_items' ) );	
-	}
-	
-	public function plugin_info(){
-		
-		$this->parent->settings->addons['affiliate-program'] = array(
-			
-			'title' 		=> 'Affiliate Program',
-			'addon_link' 	=> 'https://github.com/rafasashi/live-template-editor-affiliate',
-			'addon_name' 	=> 'live-template-editor-affiliate',
-			'source_url' 	=> 'https://github.com/rafasashi/live-template-editor-affiliate/archive/master.zip',
-			'description'	=> 'Affiliate program inluding click tracking and commissions...',
-			'author' 		=> 'Rafasashi',
-			'author_link' 	=> 'https://profiles.wordpress.org/rafasashi/',
-		);		
 	}
 
 	/**
 	 * Build settings fields
 	 * @return array Fields to be displayed on settings page
 	 */
-	public function settings_fields () {
+	public function settings_fields ($settings) {
 
-		$settings = [];
-		
 		$settings['urls']['fields'][] = array(
 		
 			'id' 			=> 'affiliateSlug',
@@ -97,23 +79,8 @@ class LTPLE_Affiliate_Settings {
 				),
 			)
 		);
-		
-		if( !empty($settings) ){
-		
-			foreach( $settings as $slug => $data ){
-				
-				if( isset($this->parent->settings->settings[$slug]['fields']) && !empty($data['fields']) ){
-					
-					$fields = $this->parent->settings->settings[$slug]['fields'];
-					
-					$this->parent->settings->settings[$slug]['fields'] = array_merge($fields,$data['fields']);
-				}
-				else{
-					
-					$this->parent->settings->settings[$slug] = $data;
-				}
-			}
-		}
+
+		return $settings;
 	}
 	
 	/**
@@ -125,7 +92,7 @@ class LTPLE_Affiliate_Settings {
 		//add menu in wordpress dashboard
 
 		add_submenu_page(
-			'live-template-editor-client',
+			'edit.php?post_type=live-editor',
 			__( 'Affiliate Commissions', $this->plugin->slug ),
 			__( 'Affiliate Commissions', $this->plugin->slug ),
 			'edit_pages',
