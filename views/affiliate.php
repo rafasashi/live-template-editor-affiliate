@@ -1,16 +1,10 @@
 <?php 
-
-	if(isset($_SESSION['message'])){ 
 	
-		//output message
-	
-		echo $_SESSION['message'];
+	if( $message = $this->parent->session->get_user_data('message') ){
 		
-		//reset message
-		
-		$_SESSION['message'] ='';
+		echo $message.PHP_EOL;
 	}
-
+	
 	if( $this->parent->user->is_affiliate ){
 						
 		$company_name = ucfirst(get_bloginfo('name'));
