@@ -92,7 +92,7 @@ class LTPLE_Affiliate_Settings {
 		//add menu in wordpress dashboard
 
 		add_submenu_page(
-			'edit.php?post_type=live-editor',
+			'ltple-settings',
 			__( 'Affiliate Commissions', $this->plugin->slug ),
 			__( 'Affiliate Commissions', $this->plugin->slug ),
 			'edit_pages',
