@@ -434,7 +434,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Foreword';
 									
@@ -461,7 +461,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Commission';
 									
@@ -485,7 +485,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Rules';
 									
@@ -514,7 +514,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#rules" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Policy';
 									
@@ -566,7 +566,7 @@
 
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Agreement';
 									
@@ -593,7 +593,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Description';
 									
@@ -621,7 +621,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Customers';
 									
@@ -647,7 +647,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Warranties';
 									
@@ -682,7 +682,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Identifying Yourself as an Affiliate';
 									
@@ -704,7 +704,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Term and Termination';
 									
@@ -733,7 +733,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Disclaimers';
 									
@@ -763,7 +763,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Limitations on Liability';
 									
@@ -787,7 +787,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Indemnification';
 									
@@ -814,7 +814,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Disputes';
 									
@@ -845,7 +845,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Additional Provisions';
 									
@@ -886,7 +886,7 @@
 								
 								echo'<div style="height:60px;border-bottom:1px solid #DDDDDD;" class="panel-heading" role="tab" id="heading_'.$tab.'">';
 									
-									echo'<button style="color:rgb(138, 206, 236);background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
+									echo'<button style="#444;background:none;text-align:left;font-size:21px;width: 100%;padding:8px;border:none;" role="button" data-toggle="collapse" data-parent="#agreement" data-target="#collapse_'.$tab.'" aria-expanded="true" aria-controls="collapse_'.$tab.'">';
 									  
 										echo'Modification';
 									

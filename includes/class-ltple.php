@@ -368,12 +368,10 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			if( strpos( $this->parent->urls->current, $this->parent->urls->affiliate ) === 0 ){
 				
 				$this->banners = get_option($this->parent->_base . 'affiliate_banners');
-			
-				if( !empty($_POST['paypal_email']) ){
+				
+				if( !empty($_POST[$this->parent->_base . '_paypal_email']) ){
 					
-					$email = sanitize_email( $_POST['paypal_email'] );
-					
-					if(is_email($email)){
+					if( $email = sanitize_email( $_POST[$this->parent->_base . '_paypal_email'] ) ){
 						
 						update_user_meta($this->parent->user->ID, $this->parent->_base . '_paypal_email', $email);
 					}
@@ -501,9 +499,36 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		if(!isset($counter['year'][$y])){
 			
 			$counter['year'][$y] = 0; // append array
-		}		
+		}
 		
 		return $counter;
+	}
+
+	public function get_user_commission($user_id,$period='all'){
+		
+		$total = 0;
+		
+		if( $period == 'all' ){
+
+			if( $commissions = get_posts(array(
+				
+				'author'      	=> $user_id,
+				'post_type'   	=> 'affiliate-commission',
+				'post_status' 	=> 'publish',
+				'numberposts' 	=> -1,
+				
+			))){
+				
+				foreach( $commissions as $commission ){
+					
+					$amount = floatval(get_post_meta( $commission->ID, 'commission_amount', true ));
+				
+					$total += $amount;
+				}
+			}
+		}
+		
+		return $total;
 	}
 
 	public function set_affiliate_counter($user_id, $type = 'clicks', $id, $counter = null){
@@ -544,7 +569,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				
 				// set total
 				
-				$counter['total'] += $amount;				
+				$counter['total'] = $this->get_user_commission($user_id);			
 			}
 			else{
 				
