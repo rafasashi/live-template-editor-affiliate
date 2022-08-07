@@ -205,7 +205,7 @@
 										
 										echo'<div class="col-xs-6">';
 										
-											echo'<b>$50.00</b> <i style="font-size:11px;">( payout fee 3,4% + $0,30 )</i>';
+											echo'<b>$50.00</b> <i style="font-size:11px;">( payout fees may incur )</i>';
 											
 										echo'</div>';											
 									

@@ -81,7 +81,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			'menu_icon' 			=> 'dashicons-admin-post',
 		));
 		
-		$this->parent->register_taxonomy( 'commission-status', __( 'Status', 'live-template-editor-affiliate' ), __( 'Commision status', 'live-template-editor-affiliate' ),  array('affiliate-commission'), array(
+		$this->parent->register_taxonomy( 'commission-status', __( 'Payout', 'live-template-editor-affiliate' ), __( 'Commision status', 'live-template-editor-affiliate' ),  array('affiliate-commission'), array(
 			'hierarchical' 			=> false,
 			'public' 				=> false,
 			'show_ui' 				=> true,
@@ -108,7 +108,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			$this->parent->admin->add_meta_box (
 			
 				'tagsdiv-commission-status',
-				__( 'Status', 'live-template-editor-client' ), 
+				__( 'Payout', 'live-template-editor-client' ), 
 				array("affiliate-commission"),
 				'side'
 			);
@@ -182,7 +182,12 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		// add panel shortocode
 		
 		add_shortcode('ltple-client-affiliate', array( $this , 'get_panel_shortcode' ) );	
+			
+		// add columns
 		
+		add_filter('manage_affiliate-commission_posts_columns', array( $this, 'filter_columns'));
+		add_action('manage_affiliate-commission_posts_custom_column', array( $this, 'add_column_content'), 10, 2);
+				
 		// add panel url
 		
 		add_filter( 'ltple_urls', array( $this, 'get_panel_url'));			
@@ -198,6 +203,30 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			echo'</li>';
 		},10);
 	}
+	
+
+	public function filter_columns($columns){
+		
+		//$columns['bulk'] = 'Edit'; // uncomment to bulk edit status
+		
+		return $columns;		
+	}
+	
+	public function add_column_content($column_name, $post_id){
+		
+		if( $column_name === 'bulk' ) {
+			
+			$post = get_post($post_id);
+			
+			if( intval($post->post_author) == 8671 ){
+				
+				wp_set_object_terms($post_id,array('paid'),'commission-status',false);
+			}
+		}	
+
+		return $column_name;
+	}
+	
 	
 	public function get_panel_url(){
 		
@@ -251,36 +280,29 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		$post_id=get_the_ID();
 
-		// get commission status
+		// get options
 		
-		$status = [];
+		$options = [];
 		
 		$terms = $this->get_commission_status();
 		
 		foreach($terms as $term){
 			
-			$status[$term->slug] = $term->name;
+			$options[$term->slug] = $term->name;
 		}
 		
 		$terms = wp_get_post_terms( $post_id, 'commission-status' );
 		
-		$default_status='';
-
-		if( isset($terms[0]->slug) ){
-			
-			$default_status=$terms[0]->slug;
-		}		
-		
 		$fields[]=array(
 			"metabox" =>
-				array('name'		=>"tagsdiv-commission-status"),
-				'id'				=>"new-tag-commission-status",
-				'name'				=>'tax_input[commission-status]',
-				'label'				=>"",
-				'type'				=>'select',
-				'options'			=>$status,
-				'selected'			=>$default_status,
-				'description'		=>''
+				array('name'		=> "tagsdiv-commission-status"),
+				'id'				=> "new-tag-commission-status",
+				'name'				=> 'tax_input[commission-status]',
+				'label'				=> "",
+				'type'				=> 'select',
+				'options'			=> $options,
+				'data'				=> isset($terms[0]->slug) ? $terms[0]->slug : 'pending',
+				'description'		=> ''
 		);
 		
 		// get commission amount
@@ -622,7 +644,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		$amount =  ( ( $price * ( $pourcent_price / 100 ) ) + ( $fee * ( $pourcent_fee / 100 ) ) );
 		
-		if( $amount > 0 ){
+		if( $amount > 0 && empty($plan['upgrade']) ){
 			
 			$pourcent = ( $total > 0 ? ( ( $amount / $total ) * 100 ) : 0 );
 			
@@ -659,7 +681,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 							}
 						}
 						
-						if($pending_id){
+						if( $pending_id ){
 					
 							// insert commission
 
@@ -708,7 +730,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 								$content 	.= 'Total amount: ' . $currency . $total . PHP_EOL;
 								$content 	.= 'Percentage: ' . $pourcent . '%' . PHP_EOL;
 								$content 	.= 'Your commission: ' . $currency . $amount . PHP_EOL;
-								$content 	.= 'Customer email: ' . $plan['subscriber'] . PHP_EOL;
+								//$content 	.= 'Customer email: ' . $plan['subscriber'] . PHP_EOL;
 								
 								wp_mail($affiliate->user_email, $title, $content);
 								
