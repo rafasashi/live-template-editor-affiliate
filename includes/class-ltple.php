@@ -135,16 +135,11 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			$this->parent->programs->list['affiliate'] = 'Affiliate';
 		});
 
-		add_action( 'ltple_campaign_triggers', function(){
+		add_action( 'ltple_newsletter_campaign_triggers', function($triggers){
 			
-			$this->parent->campaign->triggers = array_merge(
+			$triggers['ltple_affiliate_approved'] = 'Affiliate Approved';
 			
-				$this->get_terms( $this->parent->campaign->taxonomy, array( 
-							
-					'affiliate-approved' 	=> 'Affiliate Approved',
-				))			
-			
-			,$this->parent->campaign->triggers);
+			return $triggers;
 		});
 		
 		add_action( 'ltple_user_loaded', function(){
@@ -1255,7 +1250,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		if( isset($_POST[$field]) && in_array( 'affiliate', $_POST[$field]) ){
 
-			$this->parent->email->schedule_trigger( 'affiliate-approved',  $user_id);
+			do_action('ltple_affiliate_approved',$user_id);
 		}
 		
 		$field = $this->parent->_base . 'aff_clicks';
