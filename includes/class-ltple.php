@@ -341,7 +341,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 				// add tab in user panel
 				
-				add_action( 'ltple_user_tab', array($this, 'get_affiliate_tab' ) );
+				add_action( 'ltple_users_tabs', array($this, 'add_affiliate_tab' ) );
 				
 				if( $this->parent->users->view == 'affiliates' ){
 				
@@ -419,7 +419,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		));
 	}
 
-	public function get_affiliate_tab(){
+	public function add_affiliate_tab(){
 		
 		echo '<a class="nav-tab ' . ( $this->parent->users->view == 'affiliates' ? 'nav-tab-active' : '' ) . '" href="users.php?ltple_view=affiliates">Affiliates</a>';
 	}
