@@ -16,6 +16,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	var $parent;
 	var $list;
 	var $status;
+	var $view;
 	
 	var $pourcent_price = 30;
 	var $pourcent_fee 	= 20;
@@ -31,7 +32,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		$this->_token	= md5($file);
 		
 		$this->message = '';
-		
+
 		// Load plugin environment variables
 		
 		$this->file 		= $file;
@@ -335,15 +336,18 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 		
 		if( is_admin() ){
 
-			global $pagenow;
+			add_action('load-users.php', function(){
 				
-			if( $pagenow == 'users.php' ){		
+				if( isset($_REQUEST['ltple_view']) ){
+				
+					$this->view = sanitize_title($_REQUEST['ltple_view']);
+				}	
 		
 				// add tab in user panel
 				
 				add_action( 'ltple_users_tabs', array($this, 'add_affiliate_tab' ) );
 				
-				if( $this->parent->users->view == 'affiliates' ){
+				if( $this->view == 'affiliates' ){
 				
 					// filter affiliate users
 					
@@ -351,34 +355,26 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 
 					// custom users columns
 					
-					if( method_exists($this, 'update_' . $this->parent->users->view . '_table') ){
-						
-						add_filter('manage_users_columns', array($this, 'update_' . $this->parent->users->view . '_table'), 100, 1);
-					}
+					add_filter('manage_users_columns', array($this, 'update_affiliates_table'),99999, 1);
 					
-					if( method_exists($this, 'modify_' . $this->parent->users->view . '_table_row') ){
-						
-						add_filter('manage_users_custom_column', array($this, 'modify_' . $this->parent->users->view . '_table_row'), 100, 3);	
-					}
+					add_filter('manage_users_custom_column', array($this, 'modify_affiliates_table_row'), 100, 3);	
 				}
-			}
-			else{
-				
-				// get affiliate fields
-				
-				add_filter('affiliate-commission_custom_fields', array( $this, 'get_affiliate_commission_fields' ));
+			});
+			
+			// get affiliate fields
+			
+			add_filter('affiliate-commission_custom_fields', array( $this, 'get_affiliate_commission_fields' ));
 
-				
-				// add affiliate field
-				
-				add_action( 'show_user_profile', array( $this, 'get_user_referrals' ) );
-				add_action( 'edit_user_profile', array( $this, 'get_user_referrals' ) );		
-				
-				// save user programs
-				
-				add_action( 'personal_options_update', array( $this, 'save_user_affiliate' ) );
-				add_action( 'edit_user_profile_update', array( $this, 'save_user_affiliate' ) );
-			}
+			
+			// add affiliate field
+			
+			add_action( 'show_user_profile', array( $this, 'get_user_referrals' ) );
+			add_action( 'edit_user_profile', array( $this, 'get_user_referrals' ) );		
+			
+			// save user programs
+			
+			add_action( 'personal_options_update', array( $this, 'save_user_affiliate' ) );
+			add_action( 'edit_user_profile_update', array( $this, 'save_user_affiliate' ) );
 		}
 		else{
 			
@@ -421,23 +417,24 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 
 	public function add_affiliate_tab(){
 		
-		echo '<a class="nav-tab ' . ( $this->parent->users->view == 'affiliates' ? 'nav-tab-active' : '' ) . '" href="users.php?ltple_view=affiliates">Affiliates</a>';
+		echo '<a class="nav-tab ' . ( $this->view == 'affiliates' ? 'nav-tab-active' : '' ) . '" href="users.php?ltple_view=affiliates">Affiliates</a>';
 	}
 
-	public function update_affiliates_table($column) {
+	public function update_affiliates_table($columns) {
 		
-		$column=[];
-		$column["cb"]			= '<input type="checkbox" />';
-		$column["username"]		= 'Username';
-		$column["email"]		= 'Email';
-		$column["clicks"]		= 'Clicks';	
-		$column["referrals"]	= 'Referrals';
-		$column["commission"]	= 'Commission';
+		$columns=[];
 		
-		return $column;
+		$columns["cb"]			= '<input type="checkbox" />';
+		$columns["username"]	= 'Username';
+		$columns["email"]		= 'Email';
+		$columns["clicks"]		= 'Clicks';	
+		$columns["referrals"]	= 'Referrals';
+		$columns["commission"]	= 'Commission';
+		
+		return $columns;
 	}
 
-	public function modify_affiliates_table_row($val, $column_name, $user_id) {
+	public function modify_affiliates_table_row($row, $column_name, $user_id) {
 		
 		if(!isset($this->list->{$user_id})){
 		
@@ -451,9 +448,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 			$this->list->{$user_id}->referrals 		= $this->get_affiliate_counter($user_id, 'referrals');
 			$this->list->{$user_id}->commission 	= $this->get_affiliate_counter($user_id, 'commission');
 		}
-		
-		$row='';
-		
+
 		if ($column_name == "clicks") { 
 				
 			$row .= $this->list->{$user_id}->clicks['total'];
