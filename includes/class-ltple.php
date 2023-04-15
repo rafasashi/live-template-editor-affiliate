@@ -1007,27 +1007,27 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	public function get_user_referrals( $user ) {
 		
 		if( current_user_can( 'administrator' ) ){
-			
-			echo '<div class="postbox" style="min-height:45px;">';
+
+			echo '<div style="margin:10px auto;min-height:45px;">';
 				
-				//echo '<h3 style="margin:10px;width:300px;display: inline-block;">' . __( 'Referrals', 'live-template-editor-client' ) . '</h3>';
+				echo '<h2>' . __( 'Affiliate program', 'live-template-editor-client' ) . '</h3>';
 				
-				echo '<table class="widefat fixed striped" style="border:none;">';
+				echo '<table class="form-table striped">';
 					
 					echo '<thead>';
 					
 						echo'<tr>';
 						
 							echo'<td>';
-								echo'<h3 style="margin:0;">Clicks</h3>';
+								echo'<h4 style="margin:0;">Clicks</h3>';
 							echo'</td>';
 						
 							echo'<td>';
-								echo'<h3 style="margin:0;">Referrals</h3>';
+								echo'<h4 style="margin:0;">Referrals</h3>';
 							echo'</td>';
 						
 							echo'<td>';
-								echo'<h3 style="margin:0;">Commission</h3>';
+								echo'<h4 style="margin:0;">Commission</h3>';
 							echo'</td>';
 						
 						echo'</tr>';
@@ -1176,7 +1176,7 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 					
 			echo'</div>';
 			
-			echo'<div class="postbox" style="min-height:45px;">';
+			echo'<div style="margin:10px auto;min-height:45px;">';
 				
 				echo'<h3 style="margin:10px;width:300px;display: inline-block;">Pending balance</h3>';
 				
@@ -1187,55 +1187,6 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				echo'</div>';
 				
 			echo'</div>';
-			
-			/*
-			if( !empty($this->parent->editedUser->referrals) ){
-				
-				echo '<div class="postbox" style="min-height:45px;">';
-					
-					echo '<h3 style="margin:10px;width:300px;display:inline-block;">' . __( 'All Referrals', 'live-template-editor-client' ) . '</h3>';
-							
-					echo '<table class="widefat fixed striped" style="border:none;">';
-							
-						echo '<tbody>';					
-						
-							$i=0;
-							
-							foreach($this->parent->editedUser->referrals as $id => $name){
-								
-								if(is_string($name)){
-									
-									if($i==0){
-										
-										echo'<tr>';
-									}
-									
-									echo'<td>';
-									
-										echo'<a href="'.admin_url( 'user-edit.php' ).'?user_id='.$id.'">'.$name.'</a>';
-									
-									echo'</td>';
-
-									if( $i < 4 ){
-										
-										++$i;
-									}
-									else{
-										
-										$i=0;
-										
-										echo'</tr>';
-									}	
-								}
-							}
-						
-						echo '</tbody>';
-
-					echo '</table>';
-					
-				echo'</div>';
-			}
-			*/
 		}	
 	}
 
