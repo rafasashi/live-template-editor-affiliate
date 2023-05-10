@@ -1007,186 +1007,128 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 	public function get_user_referrals( $user ) {
 		
 		if( current_user_can( 'administrator' ) ){
-
-			echo '<div style="margin:10px auto;min-height:45px;">';
-				
-				echo '<h2>' . __( 'Affiliate program', 'live-template-editor-client' ) . '</h3>';
-				
-				echo '<table class="form-table striped">';
-					
-					echo '<thead>';
-					
-						echo'<tr>';
-						
-							echo'<td>';
-								echo'<h4 style="margin:0;">Clicks</h3>';
-							echo'</td>';
-						
-							echo'<td>';
-								echo'<h4 style="margin:0;">Referrals</h3>';
-							echo'</td>';
-						
-							echo'<td>';
-								echo'<h4 style="margin:0;">Commission</h3>';
-							echo'</td>';
-						
-						echo'</tr>';
-					
-					echo '</thead>';
-					
-					echo '<tbody>';
-					
-						echo'<tr>';
-						
-							echo'<td>';
-							
-								$this->get_affiliate_overview($this->parent->editedUser->affiliate_clicks);						
-								
-								if( $this->parent->user->is_admin ){
-
-									echo '<table>';
-									
-										echo'<tr>';
-										
-											echo'<td>';
-											
-												echo 'Add / Remove';					
-												
-											echo'</td>';									
-											
-											echo'<td>';								
-								
-												echo $this->parent->admin->display_field( array(
-										
-													'type'				=> 'number',
-													'id'				=> $this->parent->_base . 'aff_clicks',
-													'description'		=> '',
-													'default'			=> 0,
-													
-												), false, false );
-												
-											echo'</td>';
-
-										echo'</tr>';
-										
-									echo '</table>';
-								}								
-								
-							echo'</td>';	
-							
-							echo'<td>';
-							
-								$this->get_affiliate_overview($this->parent->editedUser->affiliate_referrals);							
-
-								if( $this->parent->user->is_admin ){
-
-									echo '<table>';
-									
-										echo'<tr>';
-										
-											echo'<td>';
-											
-												echo 'Add / Remove';					
-												
-											echo'</td>';									
-											
-											echo'<td>';								
-								
-												echo $this->parent->admin->display_field( array(
-										
-													'type'				=> 'number',
-													'id'				=> $this->parent->_base . 'aff_referrals',
-													'description'		=> '',
-													'default'			=> 0,
-													
-												), false, false );
-												
-											echo'</td>';
-
-										echo'</tr>';
-										
-									echo '</table>';
-								}
-								
-							echo'</td>';									
-							
-							echo'<td>';
-
-								$this->get_affiliate_overview($this->parent->editedUser->affiliate_commission,true,'$');																	
-								
-								if( $this->parent->user->is_admin ){
-
-									echo '<table>';
-									
-										echo'<tr>';
-										
-											echo'<td>';
-											
-												echo 'Add / Remove';					
-												
-											echo'</td>';									
-											
-											echo'<td>';								
-								
-												echo $this->parent->admin->display_field( array(
-										
-													'type'				=> 'number',
-													'id'				=> $this->parent->_base . 'aff_commission',
-													'description'		=> '',
-													'default'			=> 0,
-													
-												), false, false );
-												
-											echo'</td>';
-
-										echo'</tr>';
-										
-									echo '</table>';
-								}								
-								
-							echo'</td>';
-
-						echo'</tr>';
-						
-						echo'<tr>';
-						
-							echo'<td>';
-								echo'<i>';
-									echo'* daily unique IPs';	
-								echo'</i>';
-							echo'</td>';
-						
-							echo'<td>';
-								echo'<i>';
-									echo'* new user registrations';	
-								echo'</i>';
-							echo'</td>';
-						
-							echo'<td>';
-								echo'<i>';
-									echo'* new plan subscriptions';	
-								echo'</i>';
-							echo'</td>';
-						
-						echo'</tr>';
-						
-					echo '</tbody>';
-
-				echo '</table>';
-					
-			echo'</div>';
 			
-			echo'<div style="margin:10px auto;min-height:45px;">';
+			echo '<h2>' . __( 'Affiliate program', 'live-template-editor-client' ) . '</h3>';
+			
+			echo '<table class="form-table">';
 				
-				echo'<h3 style="margin:10px;width:300px;display: inline-block;">Pending balance</h3>';
+				echo '<thead>';
 				
-				echo'<div style="display:inline-block;">';
+					echo'<tr>';
 					
-					echo $this->get_affiliate_balance($this->parent->editedUser->ID);
+						echo'<th>Clicks</th>';
 					
-				echo'</div>';
+						echo'<th>Referrals</th>';
+					
+						echo'<th>Commission</th>';
+					
+					echo'</tr>';
 				
-			echo'</div>';
+				echo '</thead>';
+				
+				echo '<tbody>';
+				
+					echo'<tr>';
+					
+						echo'<td style="padding:0;">';
+						
+							$this->get_affiliate_overview($this->parent->editedUser->affiliate_clicks);						
+							
+							if( $this->parent->user->is_admin ){
+
+								echo $this->parent->admin->display_field( array(
+						
+									'type'				=> 'number',
+									'id'				=> $this->parent->_base . 'aff_clicks',
+									'description'		=> 'Add / Remove',
+									'default'			=> 0,
+									
+								), false, false );
+							}								
+							
+						echo'</td>';	
+						
+						echo'<td style="padding:0;">';
+						
+							$this->get_affiliate_overview($this->parent->editedUser->affiliate_referrals);							
+
+							if( $this->parent->user->is_admin ){
+
+								echo $this->parent->admin->display_field( array(
+						
+									'type'				=> 'number',
+									'id'				=> $this->parent->_base . 'aff_referrals',
+									'description'		=> 'Add / Remove',
+									'default'			=> 0,
+									
+								), false, false );
+							}
+							
+						echo'</td>';									
+						
+						echo'<td style="padding:0;">';
+
+							$this->get_affiliate_overview($this->parent->editedUser->affiliate_commission,true,'$');																	
+							
+							if( $this->parent->user->is_admin ){
+
+								echo $this->parent->admin->display_field( array(
+						
+									'type'				=> 'number',
+									'id'				=> $this->parent->_base . 'aff_commission',
+									'description'		=> 'Add / Remove',
+									'default'			=> 0,
+									
+								), false, false );
+							}								
+							
+						echo'</td>';
+
+					echo'</tr>';
+					
+					echo'<tr>';
+					
+						echo'<td>';
+							echo'<i>';
+								echo'* daily unique IPs';	
+							echo'</i>';
+						echo'</td>';
+					
+						echo'<td>';
+							echo'<i>';
+								echo'* new user registrations';	
+							echo'</i>';
+						echo'</td>';
+					
+						echo'<td>';
+							echo'<i>';
+								echo'* new plan subscriptions';	
+							echo'</i>';
+						echo'</td>';
+					
+					echo'</tr>';
+					
+				echo '</tbody>';
+
+			echo '</table>';
+			
+			echo '<table class="form-table">';
+			echo '<tbody>';
+				
+				echo '<tr>';
+				
+					echo '<th><label>Pending balance</label></th>';
+					
+					echo '<td>';
+
+						echo $this->get_affiliate_balance($this->parent->editedUser->ID);
+					
+					echo '</td>';
+				
+				echo '</tr>';
+				
+			echo '</tbody>';
+			echo '</table>';
 		}	
 	}
 
