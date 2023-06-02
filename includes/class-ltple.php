@@ -779,7 +779,20 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				
 		if( is_numeric( $this->parent->request->ref_id ) ){
 			
-			if( !empty($this->parent->users->referent->ID) && !empty($this->parent->users->referral->ID)){
+			if( !empty($this->parent->users->referent->ID) && !empty($this->parent->users->referral->ID) && empty(get_posts(array(
+			
+				'post_type' 	=> 'affiliate-commission',
+				'meta_query' 	=> array(
+					
+					array(
+						
+						'key' 		=> 'commission_details',
+						'value' 	=> $this->parent->users->referral->user_email,
+						'compare' 	=> 'LIKE',
+					),
+				),
+
+			)))){
 			
 				//set referral counter
 				
@@ -806,7 +819,6 @@ class LTPLE_Affiliate extends LTPLE_Client_Object {
 				$content 	.= '==== Registration Summary ====' . PHP_EOL . PHP_EOL;
 
 				$content 	.= 'Referral name: ' . ucfirst($this->parent->users->referral->user_nicename) . PHP_EOL;
-				$content 	.= 'Referral email: ' . $this->parent->users->referral->user_email . PHP_EOL;
 				
 				wp_mail($this->parent->users->referent->user_email, $title, $content);
 				
