@@ -46,23 +46,7 @@
 					
 					echo'<div class="tab-pane active" id="overview">';
 
-						echo'<div class="bs-callout bs-callout-primary">';
-						
-							echo'<h4>';
-							
-								echo'Overview';
-								
-							echo'</h4>';
-						
-							echo'<p>';
-							
-								echo 'Your earnings snapshot and affiliate information';
-							
-							echo'</p>';	
-
-						echo'</div>';							
-
-						echo'<div class="tab-content row">';
+						echo'<div class="tab-content row" style="margin-top:15px;">';
 
 							echo'<div class="col-xs-12 col-sm-4">';
 							
@@ -126,9 +110,9 @@
 						echo'<div class="row">';
 						echo'<div class="col-xs-12">';
 						
-							echo'<div class=" panel panel-default" style="margin-bottom:0;">';
+							echo'<div class=" panel" style="margin-bottom:0;">';
 							
-								echo'<table class="table table-striped table-hover">';
+								echo'<table class="table table-hover">';
 								
 								echo'<tbody>';
 									
