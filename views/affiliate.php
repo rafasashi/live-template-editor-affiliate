@@ -25,9 +25,10 @@
 					
 					echo'<li><a href="#urls" data-toggle="tab">My Referral urls</a></li>';
 					
-					echo'<li><a href="#materials" data-toggle="tab">Marketing Materials</a></li>';
-					
-					echo'<li><a href="#invitations" data-toggle="tab">Import Contacts <span class="label label-success pull-right">new</span></a></li>';
+					if( !empty($this->banners['key']) ){
+
+						echo'<li><a href="#materials" data-toggle="tab">Marketing Materials</a></li>';
+					}
 					
 					echo'<li><a href="#rules" data-toggle="tab">Rules & policy</a></li>';
 					
@@ -332,95 +333,62 @@
 
 					// materials
 					
-					echo'<div class="tab-pane" id="materials">';
-					
-						echo'<div class="bs-callout bs-callout-primary">';
+					if( !empty($this->banners['key']) ){
+							
+						echo'<div class="tab-pane" id="materials">';
 						
-							echo'<h4>';
+							echo'<div class="bs-callout bs-callout-primary">';
 							
-								echo'Marketing Materials';
+								echo'<h4>';
 								
-							echo'</h4>';
-						
-							echo'<p>';
-							
-								echo 'We’ve created banners, templates, and handouts for you to help your promotions.';
-							
-							echo'</p>';	
-
-						echo'</div>';
-						
-						echo'<div class="tab-content row">';
-
-						if( !empty($this->banners['key']) ){
-							
-							foreach($this->banners['key'] as $i => $title){
-								
-								$url = $this->banners['value'][$i];
-
-								echo'<div class="col-xs-12 col-sm-4">';
-								
-									echo'<div class="panel panel-default">';
+									echo'Marketing Materials';
 									
-										echo'<div class="panel-heading text-left">';
-											echo'<b>'.$title.'</b>';	
-										echo'</div>';
-										
-										echo'<div class="panel-body">';
-										
-											echo '<a href="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>';
-
-										echo'</div>';
-										
-										echo'<div class="panel-footer">';
-										
-											echo'<input type="text" class="form-control" value="'.htmlentities('<a href="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>').'"/>';
-										
-										echo'</div>';
-										
-									echo'</div>';							
+								echo'</h4>';
+							
+								echo'<p>';
 								
-								echo'</div>';
-							}
-						}
-						
-						echo'</div>';
-						
-					echo'</div>'; //materials
-					
-					// invitations
-					
-					echo'<div class="tab-pane" id="invitations">';
-
-						echo'<div class="bs-callout bs-callout-primary">';
-						
-							echo'<h4>';
-							
-								echo'Import Contacts';
+									echo 'We’ve created banners, templates, and handouts for you to help your promotions.';
 								
-							echo'</h4>';
+								echo'</p>';	
+
+							echo'</div>';
+							
+							echo'<div class="tab-content row">';						
+								
+								foreach($this->banners['key'] as $i => $title){
+									
+									$url = $this->banners['value'][$i];
+
+									echo'<div class="col-xs-12 col-sm-4">';
+									
+										echo'<div class="panel panel-default">';
+										
+											echo'<div class="panel-heading text-left">';
+												echo'<b>'.$title.'</b>';	
+											echo'</div>';
+											
+											echo'<div class="panel-body">';
+											
+												echo '<a href="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>';
+
+											echo'</div>';
+											
+											echo'<div class="panel-footer">';
+											
+												echo'<input type="text" class="form-control" value="'.htmlentities('<a href="' . $this->parent->urls->gallery . '?ri=' . $this->parent->user->refId . '"><img src="'.$url.'"/></a>').'"/>';
+											
+											echo'</div>';
+											
+										echo'</div>';							
+									
+									echo'</div>';
+								}
+
+							echo'</div>';
+							
+						echo'</div>'; //materials
 						
-							echo'<p>';
-							
-								echo 'Import your contacts with a nice email including your referral url & ID';
-							
-							echo'</p>';	
-
-						echo'</div>';							
-
-						echo'<div class="tab-content row">';
-		
-							echo'<div class="col-xs-12">';
-								
-								// get import emails
-								
-								echo $this->parent->email->get_invitation_form();								
-							
-							echo'</div>';			
-
-						echo'</div>';
-							
-					echo'</div>'; //materials
+					}
 					
 					// rules
 					
@@ -920,7 +888,7 @@
 	}
 	else{
 		
-		echo '<div class="panel-body" style="min-height:300px;">';
+		echo '<div class="panel-body" style="min-height:calc(100vh - 125px);">';
 		
 			echo '<div class="alert alert-warning">';
 			
